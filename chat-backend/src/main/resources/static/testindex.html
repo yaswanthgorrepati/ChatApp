@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Spring Boot WebSocket Chat</title>
+    <!-- Include SockJS and STOMP libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      #chat {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        height: 300px;
+        overflow-y: auto;
+      }
+      p {
+        background: #f1f1f1;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 5px 0;
+      }
+      .chat-container {
+        max-width: 600px;
+        margin: auto;
+      }
+      input[type="text"] {
+        width: 80%;
+        padding: 10px;
+      }
+      button {
+        padding: 10px 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
+      <h2>Spring Boot WebSocket Chat</h2>
+      <div>
+        <input type="text" id="username" placeholder="Enter your name" />
+        <button onclick="connect()">Connect</button>
+      </div>
+      <div>
+        <input type="text" id="messageInput" placeholder="Enter your message" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+      <div id="chat"></div>
+    </div>
+
+    <script>
+      var stompClient = null;
+
+      function connect() {
+        var socket = new SockJS("http://localhost:8080/ws");
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+          console.log("Connected: " + frame);
+          stompClient.subscribe("/topic/messages", function (messageOutput) {
+            showMessage(JSON.parse(messageOutput.body).message);
+          });
+        });
+      }
+
+      function sendMessage() {
+        var username = document.getElementById("username").value;
+        var message = document.getElementById("messageInput").value;
+        if (stompClient && stompClient.connected) {
+          stompClient.send(
+            "/app/chat",
+            {},
+            JSON.stringify({ from: username, content: message })
+          );
+          document.getElementById("messageInput").value = "";
+        } else {
+          console.log("Not connected");
+        }
+      }
+
+      function showMessage(message) {
+        var chatDiv = document.getElementById("chat");
+        var p = document.createElement("p");
+        p.appendChild(document.createTextNode(message));
+        chatDiv.appendChild(p);
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+      }
+
+      window.onload = connect;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+/* Overall container for the private chat */
+.private-chat-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Container for recipient input */
+.chat-recipient-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* Styling for recipient input */
+.chat-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+/* Chat window styling with scroll */
+.chat-window {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 300px;
+  overflow-y: auto;
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+
+/* Container for message input and send button */
+.chat-input-container {
+  display: flex;
+}
+
+/* Styling for message input field */
+.chat-message-input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+/* Styling for send button */
+.chat-send-button {
+  width: 18%;
+  padding: 10px;
+  margin-left: 2%;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.chat-send-button:hover {
+  background-color: #0056b3;
+}
+
+/* Styling for each chat message */
+.chat-message {
+  margin-bottom: 8px;
+}
+
+/* Styling for sender name */
+.chat-sender {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+/* Styling for timestamp */
+.chat-timestamp {
+  font-size: 0.75rem;
+  color: #888;
+  margin-left: 10px;
+}
+
+/* Styling for User Search component */
+.user-search-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+}
+
+.user-search-input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.user-search-button {
+  width: 18%;
+  padding: 10px;
+  margin-left: 2%;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.user-search-button:hover {
+  background-color: #0056b3;
+}
+
+.user-search-results {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.user-search-results li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.user-search-results li:hover {
+  background-color: #f1f1f1;
+}
+
+/* Styling for Login component */
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.login-button, .register-button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.login-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.login-button:hover {
+  background-color: #218838;
+}
+
+.register-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.register-button:hover {
+  background-color: #0056b3;
+}
+
+.chat-with {
+  font-size: 1.2rem;      /* Slightly larger text */
+  font-weight: bold;      /* Bold text */
+  text-align: center;     /* Centered text */
+  color: #333;            /* Dark gray text color */
+  margin-bottom: 15px;    /* Space below the element */
+}
