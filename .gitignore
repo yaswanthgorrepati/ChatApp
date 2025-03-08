@@ -25,3 +25,11 @@
 /chat-backend/target/classes/com/lld/chat/ChatApplication.class
 /chat-backend/target/classes/static/testindex.html
 /chat-backend/target/classes/application.properties
+/.idea/.gitignore
+/.idea/ChatApp.iml
+/.idea/compiler.xml
+/.idea/encodings.xml
+/.idea/jarRepositories.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
