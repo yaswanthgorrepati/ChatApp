@@ -17,6 +17,8 @@ public class ChatMessage {
     private String toUser;
     private String content;
     private String timestamp; // Format: dd/MM/yy HH:mm
+    private Boolean readStatus = false;
+
 
     public ChatMessage() {}
 
@@ -26,6 +28,7 @@ public class ChatMessage {
         this.content = content;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
         this.timestamp = LocalDateTime.now().format(formatter);
+        this.readStatus = false;
     }
 
     public Long getId() {
@@ -66,6 +69,14 @@ public class ChatMessage {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Boolean getReadStatus() {
+        return readStatus;
+    }
+
+    public void setReadStatus(Boolean readStatus) {
+        this.readStatus = readStatus;
     }
 
     @Override

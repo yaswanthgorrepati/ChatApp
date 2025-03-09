@@ -33,10 +33,47 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
         .then((response) => response.text())
         .then((text) => (text ? JSON.parse(text) : []))
         .then((data) => {
-          setChat(data); // Assuming data is an array of ChatMessage objects
+          setChat(
+            data.map((msg) => ({
+              from: msg.fromUser,
+              content: msg.content,
+              timestamp: msg.timestamp,
+            }))
+          ); // Assuming data is an array of ChatMessage objects
         })
         .catch((error) => {
           console.error("Error fetching conversation: ", error);
+        });
+    }
+  }, [username, recipient, token]);
+
+  // Mark messages as read when the conversation is viewed
+  useEffect(() => {
+    if (username && recipient) {
+      fetch(
+        `http://localhost:8080/chat/markRead?user1=${encodeURIComponent(
+          username
+        )}&user2=${encodeURIComponent(recipient)}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to mark messages as read");
+          }
+          return response.text();
+        })
+        .then((data) => {
+          console.log("Mark as read response:", data);
+          // Optionally, update your local state if you need to clear unread counts
+        })
+        .catch((error) => {
+          console.error("Error marking messages as read:", error);
         });
     }
   }, [username, recipient, token]);
@@ -117,21 +154,11 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
 
   return (
     <div className="private-chat-container">
-      <h2>Real-Time Private Chat</h2>
-      {/* <div className="chat-recipient-container">
-        <input
-          type="text"
-          placeholder="Recipient Username"
-          value={recipient}
-          onChange={(e) => setRecipient(e.target.value)}
-          className="chat-input"
-        />
-      </div> */}
       <p className="chat-with">Chatting with {recipient}</p>
       <div className="chat-window" ref={chatWindowRef}>
         {chat.map((msg, index) => (
           <div key={index} className="chat-message">
-            <span className="chat-sender">{msg.fromUser}:</span>
+            <span className="chat-sender">{msg.from}:</span>
             <span className="chat-content">{msg.content}</span>
             <span className="chat-timestamp">{msg.timestamp}</span>
           </div>
@@ -153,5 +180,4 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
     </div>
   );
 };
-
 export default PrivateChat;

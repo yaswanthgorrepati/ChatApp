@@ -1,11 +1,17 @@
 package com.lld.chat.privatechat.controller;
 
+import com.lld.chat.privatechat.model.ChatFriend;
+import com.lld.chat.privatechat.model.ChatFriendDto;
 import com.lld.chat.privatechat.model.User;
+import com.lld.chat.privatechat.repository.ChatFriendRepository;
+import com.lld.chat.privatechat.repository.ChatMessageRepository;
 import com.lld.chat.privatechat.repository.UserRepository;
 import com.lld.chat.privatechat.service.ChatFriendService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +26,12 @@ public class UserController {
     @Autowired
     private ChatFriendService chatFriendService;
 
+    @Autowired
+    private ChatFriendRepository chatFriendRepository;
+
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
+
     // Search for users by username (case-insensitive, partial match)
     @GetMapping("/search")
     public List<User> searchUsers(@RequestParam("q") String query) {
@@ -29,10 +41,14 @@ public class UserController {
 
     // Get chat-friends list for a given user
     @GetMapping("/friends")
-    public List<String> getChatFriends(@RequestParam("username") String username) {
-        return chatFriendService.getChatFriends(username)
-                .stream()
-                .map(friend -> friend.getFriend())
-                .collect(Collectors.toList());
+    public ResponseEntity<?> getChatFriends(@RequestParam("username") String username) {
+        System.out.println("messages in feinrd unread");
+        List<ChatFriend> friends = chatFriendRepository.findByChatUser(username);
+        List<ChatFriendDto> dtos = new ArrayList<>();
+        for (ChatFriend cf : friends) {
+            int unread = chatMessageRepository.countByFromUserAndToUserAndReadStatusFalse(cf.getFriend(), username);
+            dtos.add(new ChatFriendDto(cf.getFriend(), unread));
+        }
+        return ResponseEntity.ok(dtos);
     }
 }

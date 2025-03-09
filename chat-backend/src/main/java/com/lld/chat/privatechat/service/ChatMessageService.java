@@ -20,4 +20,8 @@ public class ChatMessageService {
     public List<ChatMessage> getConversation(String user1, String user2) {
         return chatMessageRepository.findByFromUserAndToUserOrFromUserAndToUser(user1, user2, user2, user1);
     }
+
+    public List<ChatMessage> saveAll(List<ChatMessage> messages) {
+        return chatMessageRepository.saveAll(messages);
+    }
 }
