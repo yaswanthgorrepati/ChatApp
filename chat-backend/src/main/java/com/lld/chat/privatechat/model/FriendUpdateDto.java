@@ -11,8 +11,19 @@ public class FriendUpdateDto {
         this.unreadCount = unreadCount;
     }
 
-    public String getFriend() { return friend; }
-    public void setFriend(String friend) { this.friend = friend; }
-    public int getUnreadCount() { return unreadCount; }
-    public void setUnreadCount(int unreadCount) { this.unreadCount = unreadCount; }
+    public String getFriend() {
+        return friend;
+    }
+
+    public void setFriend(String friend) {
+        this.friend = friend;
+    }
+
+    public int getUnreadCount() {
+        return unreadCount;
+    }
+
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
+    }
 }

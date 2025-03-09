@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
-    // Find messages between two users
+
     List<ChatMessage> findByFromUserAndToUserOrFromUserAndToUser(String fromUser, String toUser, String reverseFrom, String reverseTo);
     int countByFromUserAndToUserAndReadStatusFalse(String fromUser, String toUser);
 

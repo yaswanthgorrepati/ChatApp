@@ -73,7 +73,6 @@ public class ChatController {
 
     }
 
-    // Endpoint to retrieve conversation between two users
     @GetMapping("/chat/conversation")
     public ResponseEntity<?> getConversation(@RequestParam String user1, @RequestParam String user2) {
         System.out.println("in the chat history");

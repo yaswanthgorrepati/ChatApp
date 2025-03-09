@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -32,14 +31,12 @@ public class UserController {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
-    // Search for users by username (case-insensitive, partial match)
     @GetMapping("/search")
     public List<User> searchUsers(@RequestParam("q") String query) {
         System.out.println("searching for tghe user");
         return userRepository.findByUsernameContainingIgnoreCase(query);
     }
 
-    // Get chat-friends list for a given user
     @GetMapping("/friends")
     public ResponseEntity<?> getChatFriends(@RequestParam("username") String username) {
         System.out.println("messages in feinrd unread");

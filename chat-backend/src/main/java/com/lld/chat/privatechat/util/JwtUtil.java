@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final String SECRET_KEY = "secret"; // Secure this in production!
+    private final String SECRET_KEY = "secret";
     private final long VALIDITY = 3600000; // 1 hour
 
     public String generateToken(String username) {
