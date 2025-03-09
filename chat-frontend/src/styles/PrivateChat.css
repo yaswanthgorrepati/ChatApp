@@ -1,9 +1,8 @@
-/* Overall container for the private chat */
+/* Private Chat Component */
 .private-chat-container {
   max-width: 600px;
   margin: auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
 /* Container for recipient input */
@@ -20,7 +19,16 @@
   font-size: 1rem;
 }
 
-/* Chat window styling with scroll */
+/* "Chatting with" message styling */
+.chat-with {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Chat window styling */
 .chat-window {
   border: 1px solid #ccc;
   padding: 10px;
@@ -28,6 +36,29 @@
   overflow-y: auto;
   background-color: #fff;
   margin-bottom: 10px;
+}
+
+/* Chat message styling */
+.chat-message {
+  margin-bottom: 8px;
+}
+
+/* Styling for sender name */
+.chat-sender {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+/* Styling for chat content */
+.chat-content {
+  margin-right: 8px;
+}
+
+/* Styling for chat timestamp */
+.chat-timestamp {
+  font-size: 0.75rem;
+  color: #888;
+  margin-left: 10px;
 }
 
 /* Container for message input and send button */
@@ -60,25 +91,7 @@
   background-color: #0056b3;
 }
 
-/* Styling for each chat message */
-.chat-message {
-  margin-bottom: 8px;
-}
-
-/* Styling for sender name */
-.chat-sender {
-  font-weight: bold;
-  margin-right: 8px;
-}
-
-/* Styling for timestamp */
-.chat-timestamp {
-  font-size: 0.75rem;
-  color: #888;
-  margin-left: 10px;
-}
-
-/* Styling for User Search component */
+/* User Search Component Styles */
 .user-search-container {
   max-width: 600px;
   margin: 20px auto;
@@ -128,7 +141,7 @@
   background-color: #f1f1f1;
 }
 
-/* Styling for Login component */
+/* Login Component Styles */
 .login-container {
   max-width: 400px;
   margin: 100px auto;
@@ -140,7 +153,7 @@
 }
 
 .login-input {
-  width: 100%;
+  width: 90%;
   padding: 10px;
   margin-bottom: 10px;
   font-size: 1rem;
@@ -174,10 +187,104 @@
   background-color: #0056b3;
 }
 
-.chat-with {
-  font-size: 1.2rem;      /* Slightly larger text */
-  font-weight: bold;      /* Bold text */
-  text-align: center;     /* Centered text */
-  color: #333;            /* Dark gray text color */
-  margin-bottom: 15px;    /* Space below the element */
+
+/* App container styling */
+.App {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.no-chats {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  padding: 10px;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+/* Overall container for the chat application */
+.chat-app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+/* Top search bar container */
+.search-bar-container {
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* Main container for friends and chat window */
+.chat-main {
+  display: flex;
+  flex: 1;
+}
+
+/* Left sidebar for friends list */
+.friends-container {
+  width: 25%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-right: 20px;
+}
+
+/* Friends list heading */
+.friends-container h3 {
+  text-align: center;
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Friends list styling */
+.friends-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.friends-list li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.friends-list li:last-child {
+  border-bottom: none;
+}
+
+.friends-list li:hover {
+  background-color: #e6e6e6;
+}
+
+/* Right area: chat window container */
+.chat-window-container {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+.no-selection {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px dashed #ccc;
+  background-color: #f9f9f9;
+  border-radius: 4px;
 }
