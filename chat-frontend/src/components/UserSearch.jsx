@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../styles/PrivateChat.css";
 
-const UserSearch = ({ onSelectUser, token }) => {
+const UserSearch = ({ token, onSelectUser }) => {
   const [searchText, setSearchText] = useState("");
   const [results, setResults] = useState([]);
 
@@ -16,7 +16,7 @@ const UserSearch = ({ onSelectUser, token }) => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + token, // Include the JWT token here
+            Authorization: "Bearer " + token,
           },
         }
       );

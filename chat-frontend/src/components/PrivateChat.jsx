@@ -5,17 +5,18 @@ import "../styles/PrivateChat.css";
 
 const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
   const [stompClient, setStompClient] = useState(null);
-  const [recipient, setRecipient] = useState(initialRecipient || "");
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
   const subscriptionRef = useRef(null);
   const chatWindowRef = useRef(null);
+  const [recipient, setRecipient] = useState(initialRecipient || "");
 
+  // Update recipient if the prop changes
   useEffect(() => {
     if (initialRecipient) setRecipient(initialRecipient);
   }, [initialRecipient]);
 
-  // Fetch conversation history
+  // Fetch conversation history when username and recipient are available
   useEffect(() => {
     if (username && recipient) {
       fetch(
@@ -39,7 +40,7 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
               content: msg.content,
               timestamp: msg.timestamp,
             }))
-          ); // Assuming data is an array of ChatMessage objects
+          );
         })
         .catch((error) => {
           console.error("Error fetching conversation: ", error);
@@ -47,38 +48,41 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
     }
   }, [username, recipient, token]);
 
-  // Mark messages as read when the conversation is viewed
+  // Call markRead API when a new message is received from the friend
   useEffect(() => {
-    if (username && recipient) {
-      fetch(
-        `http://localhost:8080/chat/markRead?user1=${encodeURIComponent(
-          username
-        )}&user2=${encodeURIComponent(recipient)}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to mark messages as read");
+    if (username && recipient && chat.length > 0) {
+      const lastMsg = chat[chat.length - 1];
+      // If the last message is from the friend (i.e. not sent by "Me")
+      if (lastMsg.from !== "Me") {
+        fetch(
+          `http://localhost:8080/chat/markRead?user1=${encodeURIComponent(
+            username
+          )}&user2=${encodeURIComponent(recipient)}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
           }
-          return response.text();
-        })
-        .then((data) => {
-          console.log("Mark as read response:", data);
-          // Optionally, update your local state if you need to clear unread counts
-        })
-        .catch((error) => {
-          console.error("Error marking messages as read:", error);
-        });
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to mark messages as read");
+            }
+            return response.text();
+          })
+          .then((data) => {
+            console.log("Messages marked as read:", data);
+          })
+          .catch((error) => {
+            console.error("Error marking messages as read:", error);
+          });
+      }
     }
-  }, [username, recipient, token]);
+  }, [chat, username, recipient, token]);
 
-  // Establish WebSocket connection
+  // Establish WebSocket connection for real-time messaging
   useEffect(() => {
     let client = null;
     try {
@@ -95,12 +99,11 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
               "/user/queue/messages",
               (msg) => {
                 const response = JSON.parse(msg.body);
-                //show only the messages from the receipient in the chat window
-                if (response.from === recipient || response.from === username) {
+                if (response.from === username || response.from === recipient) {
                   setChat((prevChat) => [
                     ...prevChat,
                     {
-                      fromUser: response.from,
+                      from: response.from,
                       content: response.content,
                       timestamp: response.timestamp,
                     },
@@ -129,7 +132,7 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
     };
   }, [username, token]);
 
-  // Auto-scroll chat window
+  // Auto-scroll chat window when new messages arrive
   useEffect(() => {
     if (chatWindowRef.current) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
@@ -154,6 +157,16 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
 
   return (
     <div className="private-chat-container">
+      <h2>Real-Time Private Chat</h2>
+      <div className="chat-recipient-container">
+        <input
+          type="text"
+          placeholder="Recipient Username"
+          value={recipient}
+          onChange={(e) => setRecipient(e.target.value)}
+          className="chat-input"
+        />
+      </div>
       <p className="chat-with">Chatting with {recipient}</p>
       <div className="chat-window" ref={chatWindowRef}>
         {chat.map((msg, index) => (
@@ -180,4 +193,5 @@ const PrivateChat = ({ token, username, recipient: initialRecipient }) => {
     </div>
   );
 };
+
 export default PrivateChat;

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Login from "./components/Login";
-import PrivateChat from "./components/PrivateChat";
-import UserSearch from "./components/UserSearch";
-import FriendUpdates from "./components/FriendUpdates";
-import "./App.css";
-import "./styles/PrivateChat.css";
 
-function App() {
+import PrivateChat from "./PrivateChat";
+import UserSearch from "./UserSearch";
+import FriendUpdates from "./FriendUpdates";
+import Login from "./Login";
+
+import "../styles/PrivateChat.css";
+
+const Chat = () => {
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
@@ -51,7 +52,7 @@ function App() {
   // Handler for friend updates pushed via WebSocket
   const handleFriendUpdate = (update) => {
     setFriends((prevFriends) => {
-      // Update existing friend entry if found or add new one
+      // Update the friend entry if exists, or add new one
       const index = prevFriends.findIndex((f) => f.friend === update.friend);
       if (index >= 0) {
         const updatedFriends = [...prevFriends];
@@ -103,17 +104,21 @@ function App() {
                 username={username}
                 onUpdate={handleFriendUpdate}
               />
-              <PrivateChat
-                token={token}
-                username={username}
-                recipient={selectedUser}
-              />
+              {selectedUser ? (
+                <PrivateChat
+                  token={token}
+                  username={username}
+                  recipient={selectedUser}
+                />
+              ) : (
+                <p className="no-selection">select user to start chatting!</p>
+              )}
             </div>
           </div>
         </>
       )}
     </div>
   );
-}
+};
 
-export default App;
+export default Chat;

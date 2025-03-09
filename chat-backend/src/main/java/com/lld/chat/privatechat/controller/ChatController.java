@@ -52,14 +52,25 @@ public class ChatController {
         }
 
         // Send friend update to recipient: count unread messages from sender
-        int unreadForRecipient = chatMessageRepository.countByFromUserAndToUserAndReadStatusFalse(chatMessage.getFromUser(), chatMessage.getToUser());
-        FriendUpdateDto updateForRecipient = new FriendUpdateDto(chatMessage.getFromUser(), unreadForRecipient);
-        simpMessagingTemplate.convertAndSendToUser(chatMessage.getToUser(), "/queue/friendUpdates", updateForRecipient);
+        try {
+            int unreadForRecipient = chatMessageRepository.countByFromUserAndToUserAndReadStatusFalse(chatMessage.getFromUser(), chatMessage.getToUser());
+            FriendUpdateDto updateForRecipient = new FriendUpdateDto(chatMessage.getFromUser(), unreadForRecipient);
+            simpMessagingTemplate.convertAndSendToUser(chatMessage.getToUser(), "/queue/friendUpdates", updateForRecipient);
+        } catch (Exception ex) {
+            // Log the exception and move on.
+            System.err.println("Failed to send message, session may be closed -1 : " + ex.getMessage());
+        }
 
-        // Optionally, update sender's friend list too
-        int unreadForSender = chatMessageRepository.countByFromUserAndToUserAndReadStatusFalse(chatMessage.getToUser(), chatMessage.getFromUser());
-        FriendUpdateDto updateForSender = new FriendUpdateDto(chatMessage.getToUser(), unreadForSender);
-        simpMessagingTemplate.convertAndSendToUser(chatMessage.getFromUser(), "/queue/friendUpdates", updateForSender);
+        try{
+            // Optionally, update sender's friend list too
+            int unreadForSender = chatMessageRepository.countByFromUserAndToUserAndReadStatusFalse(chatMessage.getToUser(), chatMessage.getFromUser());
+            FriendUpdateDto updateForSender = new FriendUpdateDto(chatMessage.getToUser(), unreadForSender);
+            simpMessagingTemplate.convertAndSendToUser(chatMessage.getFromUser(), "/queue/friendUpdates", updateForSender);
+        } catch (Exception ex) {
+            // Log the exception and move on.
+            System.err.println("Failed to send message, session may be closed -2: " + ex.getMessage());
+        }
+
     }
 
     // Endpoint to retrieve conversation between two users
@@ -77,6 +88,24 @@ public class ChatController {
         messages.stream().filter(msg -> !msg.getReadStatus() && msg.getToUser().equals(user1))
                 .forEach(msg -> msg.setReadStatus(true));
         chatMessageService.saveAll(messages);
+        try {
+            int unreadForRecipient = chatMessageRepository.countByFromUserAndToUserAndReadStatusFalse(user1, user2);
+            FriendUpdateDto updateForRecipient = new FriendUpdateDto(user1, unreadForRecipient);
+            simpMessagingTemplate.convertAndSendToUser(user2, "/queue/friendUpdates", updateForRecipient);
+        } catch (Exception ex) {
+            // Log the exception and move on.
+            System.err.println("Failed to send message, session may be closed -1 : " + ex.getMessage());
+        }
+
+        try{
+            // Optionally, update sender's friend list too
+            int unreadForSender = chatMessageRepository.countByFromUserAndToUserAndReadStatusFalse(user2, user1);
+            FriendUpdateDto updateForSender = new FriendUpdateDto(user2, unreadForSender);
+            simpMessagingTemplate.convertAndSendToUser(user1, "/queue/friendUpdates", updateForSender);
+        } catch (Exception ex) {
+            // Log the exception and move on.
+            System.err.println("Failed to send message, session may be closed -2: " + ex.getMessage());
+        }
         return ResponseEntity.ok("Messages marked as read");
     }
 }
