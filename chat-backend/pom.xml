@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lld</groupId>
-	<artifactId>Backend</artifactId>
+	<artifactId>chat-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>CHAT Application</name>
 	<description>A chat application</description>
